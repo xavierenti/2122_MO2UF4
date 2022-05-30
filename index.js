@@ -1,6 +1,7 @@
 #!/usr/bin/node
 
 let http = require("http");
+let fs = require("fs");
 
 let mongo_client = require("mongodb").MongoClient;
 
@@ -28,7 +29,10 @@ http.createServer(function(req, res){
 	res.writeHead(200);
 	
 	if (req.url =="/"){
-		res.end();
+		fs.readFile("index.html", function(err,data){
+			res.writeHead(200, {"Content-Type": "text/html"});
+			res.end();
+		});
 
 		return;
 	}
@@ -52,8 +56,8 @@ http.createServer(function(req, res){
 
 	let characters = db.collection(col).find;
 
-	characters.toArray(function(err,data)
-		let string = JSON.string(data);
+	characters.toArray(function(err,data){
+		let string = JSON.stringify(data);
 
 		res.end(string);
 	});
